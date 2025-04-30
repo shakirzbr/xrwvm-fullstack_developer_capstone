@@ -8,6 +8,8 @@ const Dealers = () => {
   const [dealersList, setDealersList] = useState([]);
   // let [state, setState] = useState("")
   let [states, setStates] = useState([])
+  const [searchQuery, setSearchQuery] = useState([]);
+  const [originalDealers, setOriginalDealers] = useState([]);
 
   // let root_url = window.location.origin
   let dealer_url ="/djangoapp/get_dealers";
@@ -37,7 +39,8 @@ const Dealers = () => {
       all_dealers.forEach((dealer)=>{
         states.push(dealer.state)
       });
-
+    
+      setOriginalDealers(all_dealers);
       setStates(Array.from(new Set(states)))
       setDealersList(all_dealers)
     }
@@ -45,6 +48,19 @@ const Dealers = () => {
   useEffect(() => {
     get_dealers();
   },[]);  
+
+  const handleInputChange = (event) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+    const filtered = originalDealers.filter(dealer => dealer.state.toLowerCase().includes(query.toLowerCase()));
+    setDealersList(filtered);
+  }
+
+  const handleLostFocus = () => {
+    if (!searchQuery) {
+      setDealersList(originalDealers);
+    }
+  }
 
 
 let isLoggedIn = sessionStorage.getItem("username") != null ? true : false;
