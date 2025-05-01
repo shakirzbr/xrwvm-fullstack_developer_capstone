@@ -148,7 +148,14 @@ def add_review(request):
         data = json.loads(request.body)
         try:
             response = post_review(data)
-        return JsonResponse({"status": 200})
+            if response.get("status") == 200:
+                print("Review posted successfully:", response)
+            return JsonResponse(
+                {
+                    "status": 200,
+                    "message": "Review posted successfully",
+                    "review": data
+                })
     except Exception as e:
         print(f"Error in posting review: {e}")
         return JsonResponse({"status": 401,"message":
