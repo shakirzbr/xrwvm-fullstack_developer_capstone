@@ -19,7 +19,7 @@ class CarMake(models.Model):
 # <HINT> Create a Car Model model `class CarModel(models.Model):`:
 class CarModel(models.Model):
     car_make = models.ForeignKey(
-        CarMake, on_delete=models.CASCADE) # Many-to-One relationship
+        CarMake, on_delete=models.CASCADE)  # Many-to-One relationship
     name = models.CharField(max_length=100)
     CAR_TYPES = [
         ('SEDAN', 'Sedan'),
@@ -30,9 +30,9 @@ class CarModel(models.Model):
     ]
     type = models.CharField(max_length=10, choices=CAR_TYPES, default='SUV')
     year = models.IntegerField(default=2023,
-        validators=[
-                        MaxValueValidator(2023),
-                        MinValueValidator(2015)
+                                validators=[
+                                            MaxValueValidator(2023),
+                                            MinValueValidator(2015)
         ])
     color = models.CharField(max_length=10)
     # Other fields as needed
