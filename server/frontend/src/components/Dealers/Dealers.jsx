@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import "./Dealers.css";
 import "../assets/style.css";
 import Header from '../Header/Header';
@@ -8,8 +8,6 @@ const Dealers = () => {
   const [dealersList, setDealersList] = useState([]);
   // let [state, setState] = useState("")
   let [states, setStates] = useState([])
-  const [searchQuery, setSearchQuery] = useState([]);
-  const [originalDealers, setOriginalDealers] = useState([]);
 
   // let root_url = window.location.origin
   let dealer_url ="/djangoapp/get_dealers";
@@ -28,7 +26,7 @@ const Dealers = () => {
     }
   }
 
-  const get_dealers = async ()=>{
+  const get_dealers = useCallback(async ()=>{
     const res = await fetch(dealer_url, {
       method: "GET"
     });
@@ -40,28 +38,15 @@ const Dealers = () => {
         states.push(dealer.state)
       });
     
-      setOriginalDealers(all_dealers);
       setStates(Array.from(new Set(states)))
       setDealersList(all_dealers)
     }
-  }
+  }, [dealer_url]);
+
   useEffect(() => {
     get_dealers();
-  },[]);  
-
-  const handleInputChange = (event) => {
-    const query = event.target.value;
-    setSearchQuery(query);
-    const filtered = originalDealers.filter(dealer => dealer.state.toLowerCase().includes(query.toLowerCase()));
-    setDealersList(filtered);
-  }
-
-  const handleLostFocus = () => {
-    if (!searchQuery) {
-      setDealersList(originalDealers);
-    }
-  }
-
+  }, [get_dealers]);
+  
 
 let isLoggedIn = sessionStorage.getItem("username") != null ? true : false;
 return(
