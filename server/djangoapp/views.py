@@ -69,7 +69,7 @@ def registration(request):
     if not username_exist:
         # Create user in auth_user table
         user = User.objects.create_user(
-            username=username, 
+            username=username,
             first_name=first_name,
             last_name=last_name,
             password=password,
@@ -158,7 +158,7 @@ def add_review(request):
                 })
         except Exception as e:
             print(f"Error in posting review: {e}")
-            return JsonResponse({"status": 401,"message":
-                              "Error in posting review"})
+            return JsonResponse({"status": 401, "message":
+                                 "Error in posting review"})
     else:
         return JsonResponse({"status": 403, "message": "Unauthorized"})
