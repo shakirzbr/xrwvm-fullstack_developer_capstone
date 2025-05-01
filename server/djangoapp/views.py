@@ -112,6 +112,12 @@ def get_dealer_reviews(request, dealer_id):
             response = analyze_review_sentiments(review_detail['review'])
             print(response)
             review_detail['sentiment'] = response['sentiment']
+
+            if response is not None and 'sentiment' in response:
+                review_detail['sentiment'] = response['sentiment']
+            else:
+                review_detail['sentiment'] = 'neutral'
+
         return JsonResponse({"status":200,"reviews":reviews})
     else:
         return JsonResponse({"status":400,"message":"Bad Request"})
@@ -127,12 +133,16 @@ def get_dealer_details(request, dealer_id):
 
 # Create a `add_review` view to submit a review
 def add_review(request):
-    if(request.user.is_anonymous == False):
+    if request.user.is_authenticated:
         data = json.loads(request.body)
+        print(data)
         try:
             response = post_review(data)
+            if response.get("status") == 200:
+                print("Review posted successfully:", response)
             return JsonResponse({"status":200})
-        except:
+        except Exception as e:
+            print(f"Error in posting review: {e}")
             return JsonResponse({"status":401,"message":"Error in posting review"})
     else:
         return JsonResponse({"status":403,"message":"Unauthorized"})
