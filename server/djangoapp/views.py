@@ -133,16 +133,27 @@ def get_dealer_details(request, dealer_id):
 
 # Create a `add_review` view to submit a review
 def add_review(request):
-    if request.user.is_authenticated:
+    if(request.user.is_anonymous == False):
         data = json.loads(request.body)
-        print(data)
         try:
             response = post_review(data)
-            if response.get("status") == 200:
-                print("Review posted successfully:", response)
             return JsonResponse({"status":200})
-        except Exception as e:
-            print(f"Error in posting review: {e}")
+        except:
             return JsonResponse({"status":401,"message":"Error in posting review"})
     else:
         return JsonResponse({"status":403,"message":"Unauthorized"})
+
+# def add_review(request):
+#     if request.user.is_authenticated:
+#         data = json.loads(request.body)
+#         print(data)
+#         try:
+#             response = post_review(data)
+#             if response.get("status") == 200:
+#                 print("Review posted successfully:", response)
+#             return JsonResponse({"status":200})
+#         except Exception as e:
+#                 print(f"Error in posting review: {e}")
+#             return JsonResponse({"status":401,"message":"Error in posting review"})
+#     else:
+#         return JsonResponse({"status":403,"message":"Unauthorized"})
